@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020, {{cookiecutter.copyright}}
+# Copyright (C) {{cookiecutter.copyright}}
 #
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
