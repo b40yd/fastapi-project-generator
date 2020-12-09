@@ -20,6 +20,9 @@
 
 from typing import Generator
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from starlette.requests import Request
+
 from app.db.session import SessionLocal
 
 
@@ -29,3 +32,7 @@ def get_db() -> Generator:
         yield db
     finally:
         db.close()
+
+
+def get_scheduler(request: Request) -> AsyncIOScheduler:
+    return request.app.scheduler
