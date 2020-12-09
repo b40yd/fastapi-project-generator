@@ -1,5 +1,6 @@
 {
     "project_name": "fastapi_project",
+    "copyright": "copyright"
     "author": "author",
     "email": "email"
 }
