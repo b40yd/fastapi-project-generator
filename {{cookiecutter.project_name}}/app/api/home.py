@@ -1,30 +1,49 @@
 #
-# Copyright (C) 2020, 7ym0n.q6e
+# Copyright (C) 2020, {{cookiecutter.author}}
 #
-# Author: 7ym0n.q6e <bb.qnyd@gmail.com>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
+from app.core.deps import get_db, get_scheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import APIRouter, Depends
+from loguru import logger
 from sqlalchemy.orm import Session
-
-from app.core.deps import get_db
 
 router = APIRouter()
 
 
+async def hello_task():
+    logger.info("hello task....")
+
+
 @router.get("/")
-async def home(db: Session = Depends(get_db)) -> dict:
+async def home(db: Session = Depends(get_db),
+               scheduler: AsyncIOScheduler = Depends(get_scheduler)) -> dict:
+    # scheduler.add_job(hello_task, 'interval', seconds=3)
     return {"router": "/"}
+
+
+@router.get("/add/test")
+async def test_add(db: Session = Depends(get_db),
+                   scheduler: AsyncIOScheduler = Depends(get_scheduler)) -> dict:
+    job = scheduler.add_job(hello_task, 'interval', seconds=3)
+    return {"id": job.id}
+
+
+@router.get("/tasks")
+async def get_tasks(db: Session = Depends(get_db),
+                    scheduler: AsyncIOScheduler = Depends(get_scheduler)) -> dict:
+    jobs = scheduler.get_jobs()
+    rst = []
+    for job in jobs:
+        rst.append({"id": job.id})
+    return rst
+
+
+@router.get("/del/{id}")
+async def del_task(id: str,
+                   db: Session = Depends(get_db),
+                   scheduler: AsyncIOScheduler = Depends(get_scheduler)) -> dict:
+    scheduler.remove_job(id)
+    return {"id": id}

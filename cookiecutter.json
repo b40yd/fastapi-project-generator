@@ -1,3 +1,5 @@
 {
-    "project_name": "fastapi_project"
+    "project_name": "fastapi_project",
+    "author": "author",
+    "email": "email"
 }
