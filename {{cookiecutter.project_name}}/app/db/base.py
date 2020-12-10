@@ -22,7 +22,7 @@ class Base:
                          onupdate=datetime.now,
                          server_default=func.now(),
                          server_onupdate=func.now())
-    is_delete = Column(Integer, default=0)
+    is_drop = Column(Integer, default=0)
     __name__: str
 
     @declared_attr

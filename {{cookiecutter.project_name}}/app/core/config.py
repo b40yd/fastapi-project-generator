@@ -5,6 +5,7 @@
 #
 
 
+import hashlib
 import logging
 import sys
 from typing import List
@@ -25,13 +26,17 @@ DEBUG: bool = config("DEBUG", cast=bool, default=False)
 
 DATABASE_URL: str = config(
     "DB_CONNECTION",
-    default="sqlite:///{{cookiecutter.project_name}}.sqlite?charset=utf8")
+    default="sqlite:///{{cookiecutter.project_name}}.sqlite?charset=utf8&check_same_thread=false")
 MAX_CONNECTIONS_COUNT: int = config(
     "MAX_CONNECTIONS_COUNT", cast=int, default=10)
 MIN_CONNECTIONS_COUNT: int = config(
     "MIN_CONNECTIONS_COUNT", cast=int, default=10)
 
-SECRET_KEY: Secret = config("SECRET_KEY", cast=Secret)
+DATABASE_ECHO: bool = DEBUG
+hash = hashlib.sha512()
+hash.update('{{cookiecutter.project_name}}'.encode('utf-8'))
+SECRET_KEY: str = config("SECRET_KEY", default=hash.hexdigest())
+ACCESS_TOKEN_EXPIRE: int = 60 * 60 * 24 * 7
 
 PROJECT_NAME: str = config(
     "PROJECT_NAME", default="FastAPI example application")
