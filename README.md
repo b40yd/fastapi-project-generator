@@ -8,7 +8,7 @@ An Fast generator fastapi project
 ```
 ## database
 * Notes: 
-	change databse **alembic.ini** `sqlalchemy.url = ` your drive.
+	change database **alembic.ini** `sqlalchemy.url = ` your drive.
 
 	exec:
 ```
