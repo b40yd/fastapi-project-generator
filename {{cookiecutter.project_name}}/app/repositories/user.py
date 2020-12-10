@@ -43,15 +43,12 @@ class UserRepository():
     @classmethod
     def create(self, db: Session, userinfo: UserRegister) -> Token:
         password = get_password_hash(userinfo.password)
-
-        user = self.get_by_username(db, userinfo.username)
-        if not user:
-            user = User()
-            user.username = userinfo.username
-            user.password = password
-            user.email = userinfo.email
-            db.add(user)
-            db.commit()
+        user = User()
+        user.username = userinfo.username
+        user.password = password
+        user.email = userinfo.email
+        db.add(user)
+        db.commit()
         return user
 
     @classmethod
