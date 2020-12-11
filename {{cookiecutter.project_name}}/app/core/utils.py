@@ -6,10 +6,10 @@
 
 class Queue:
     def __init__(self, data: list):
-        self.data = data.append(None)
+        self.data = data
         self.front = 0
         self.tail = 0
-        self.size = len(data)+1
+        self.size = len(data)
 
     def __str__(self):
         return str(self.data)
