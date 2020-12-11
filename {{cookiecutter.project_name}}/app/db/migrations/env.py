@@ -21,7 +21,7 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[3]))
-from app.core.config import DATABASE_URL
+
 from app.models import Base
 target_metadata = Base.metadata
 
