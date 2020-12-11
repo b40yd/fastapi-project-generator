@@ -7,7 +7,7 @@
 from datetime import datetime, timedelta
 from typing import Dict, Optional
 
-from app.core.config import ACCESS_TOKEN_EXPIRE, SECRET_KEY
+from app.core.config import settings
 from jose import jwt
 from passlib.context import CryptContext
 
@@ -39,6 +39,6 @@ def create_jwt_token(
 def create_access_token(username: str,):
     return create_jwt_token(
         jwt_content={"sub": username},
-        secret_key=SECRET_KEY,
-        expires_delta=timedelta(seconds=ACCESS_TOKEN_EXPIRE)
+        secret_key=settings.SECRET_KEY,
+        expires_delta=timedelta(seconds=settings.ACCESS_TOKEN_EXPIRE)
     )

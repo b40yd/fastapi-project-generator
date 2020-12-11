@@ -5,9 +5,9 @@
 #
 
 
-from app.core.config import DATABASE_ECHO, DATABASE_URL
+from app.core.config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine(DATABASE_URL, echo=DATABASE_ECHO, pool_pre_ping=True)
+engine = create_engine(settings.DATABASE_URL, echo=settings.DATABASE_ECHO, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine)

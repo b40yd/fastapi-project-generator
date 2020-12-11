@@ -4,16 +4,16 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
+from fastapi import Depends, Header, HTTPException, status
+from jose import JWTError, jwt
+from sqlalchemy.orm import Session
 
-from app.core.config import SECRET_KEY
+from app.core.config import settings
 from app.core.deps import get_db
 from app.core.security import get_password_hash, verify_password
 from app.models.user import User
 from app.schemas.token import Token
 from app.schemas.user import UserInfo, UserRegister
-from fastapi import Depends, Header, HTTPException, status
-from jose import JWTError, jwt
-from sqlalchemy.orm import Session
 
 
 async def get_current_user(x_token: str = Header(None),
@@ -24,7 +24,7 @@ async def get_current_user(x_token: str = Header(None),
         headers={"WWW-Authenticate": ""},
     )
     try:
-        payload = jwt.decode(x_token, SECRET_KEY)
+        payload = jwt.decode(x_token, settings.SECRET_KEY)
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception

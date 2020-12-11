@@ -6,7 +6,7 @@
 
 from typing import Callable
 
-from app.core.config import DATABASE_URL
+from app.core.config import settings
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI
@@ -14,9 +14,9 @@ from loguru import logger
 
 
 async def start_scheduler(app: FastAPI) -> None:
-    logger.info("APScheduler Starting", repr(DATABASE_URL))
+    logger.info("APScheduler Starting", repr(settings.DATABASE_URL))
     jobstores = {
-        'default': SQLAlchemyJobStore(url=DATABASE_URL)
+        'default': SQLAlchemyJobStore(url=settings.DATABASE_URL)
     }
     app.scheduler = AsyncIOScheduler()
     app.scheduler.configure(jobstores=jobstores)
