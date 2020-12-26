@@ -10,47 +10,52 @@ import logging
 import sys
 from typing import List
 
-from app.core.logging import InterceptHandler
 from loguru import logger
 from pydantic import BaseSettings
-from starlette.config import Config
-from starlette.datastructures import CommaSeparatedStrings
+
+from app.core.logging import InterceptHandler
 
 hash = hashlib.sha512()
 hash.update('info-leak-monitor'.encode('utf-8'))
 
 
 class Settings(BaseSettings):
-    API_PREFIX: str = "/api"
 
-    JWT_TOKEN_PREFIX: str = "Token"  # noqa: S105
-    VERSION: str = "0.0.0"
+    jwt_token_prefix: str = "token"  # noqa: s105
+    version: str = "0.0.0"
 
-    config: Config = Config(".env")
+    debug: bool = False
+    log_file: str = 'info.log'
 
-    DEBUG: bool = config("DEBUG", cast=bool, default=False)
+    database_url: str = "sqlite:///info-leak-monitor.sqlite?charset=utf8mb4&check_same_thread=false"
 
-    DATABASE_URL: str = config(
-        "DB_CONNECTION",
-        default="sqlite:///info-leak-monitor.sqlite?charset=utf8mb4&check_same_thread=false")
-    MAX_CONNECTIONS_COUNT: int = config(
-        "MAX_CONNECTIONS_COUNT", cast=int, default=10)
+    database_echo: bool = False
 
-    DATABASE_ECHO: bool = DEBUG
+    secret_key: str = hash.hexdigest()
+    access_token_expire: int = 60 * 60 * 24 * 7
 
-    SECRET_KEY: str = config("SECRET_KEY", default=hash.hexdigest())
-    ACCESS_TOKEN_EXPIRE: int = 60 * 60 * 24 * 7
+    apscheduler_max_instances: int = 10
 
-    APSCHEDULER_MAX_INSTANCES: int = config(
-        "APSCHEDULER_MAX_INSTANCES", cast=int,  default=10)
+    project_name: str = "fastapi example application"
+    api_prefix: str = "/api"
+    allowed_hosts: List[str] = ['*']
 
-    PROJECT_NAME: str = config(
-        "PROJECT_NAME", default="FastAPI example application")
-    ALLOWED_HOSTS: List[str] = config(
-        "ALLOWED_HOSTS",
-        cast=CommaSeparatedStrings,
-        default=None,
-    )
+    class Config:
+        env_file = ".env"
+        env_file_encoding = 'utf-8'
+        case_sensitive = True
 
 
 settings = Settings()
+
+LOGGING_LEVEL = logging.DEBUG if settings.debug else logging.INFO
+LOGGERS = ("uvicorn.asgi", "uvicorn.access")
+
+logging.getLogger().handlers = [InterceptHandler()]
+for logger_name in LOGGERS:
+    logging_logger = logging.getLogger(logger_name)
+    logging_logger.handlers = [InterceptHandler(level=LOGGING_LEVEL)]
+
+logger.configure(
+    handlers=[{"sink": settings.log_file, "level": LOGGING_LEVEL}])
+logger.add(settings.log_file, rotation="00:00")

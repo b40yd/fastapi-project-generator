@@ -17,12 +17,12 @@ from app.core.validation_error import http422_error_handler
 
 
 def get_application() -> FastAPI:
-    application = FastAPI(title=settings.PROJECT_NAME,
-                          debug=settings.DEBUG, version=settings.VERSION)
+    application = FastAPI(title=settings.project_name,
+                          debug=settings.debug, version=settings.version)
 
     application.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.ALLOWED_HOSTS or ["*"],
+        allow_origins=settings.allowed_hosts or ["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -37,7 +37,7 @@ def get_application() -> FastAPI:
     application.add_exception_handler(
         RequestValidationError, http422_error_handler)
 
-    application.include_router(api_router, prefix=settings.API_PREFIX)
+    application.include_router(api_router, prefix=settings.api_prefix)
 
     return application
 

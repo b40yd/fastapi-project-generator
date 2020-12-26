@@ -39,6 +39,6 @@ def create_jwt_token(
 def create_access_token(username: str,):
     return create_jwt_token(
         jwt_content={"sub": username},
-        secret_key=settings.SECRET_KEY,
-        expires_delta=timedelta(seconds=settings.ACCESS_TOKEN_EXPIRE)
+        secret_key=settings.secret_key,
+        expires_delta=timedelta(seconds=settings.access_token_expire)
     )

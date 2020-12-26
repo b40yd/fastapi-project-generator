@@ -14,9 +14,9 @@ from loguru import logger
 
 
 async def start_scheduler(app: FastAPI) -> None:
-    logger.info("APScheduler Starting", repr(settings.DATABASE_URL))
+    logger.info("APScheduler Starting", repr(settings.database_url))
     jobstores = {
-        'default': SQLAlchemyJobStore(url=settings.DATABASE_URL)
+        'default': SQLAlchemyJobStore(url=settings.database_url)
     }
     app.scheduler = AsyncIOScheduler()
     app.scheduler.configure(jobstores=jobstores)

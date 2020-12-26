@@ -24,7 +24,7 @@ async def get_current_user(x_token: str = Header(None),
         headers={"WWW-Authenticate": ""},
     )
     try:
-        payload = jwt.decode(x_token, settings.SECRET_KEY)
+        payload = jwt.decode(x_token, settings.secret_key)
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
