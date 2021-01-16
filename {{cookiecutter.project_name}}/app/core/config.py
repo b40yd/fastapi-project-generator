@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     debug: bool = False
     log_file: str = 'info.log'
 
-    database_url: str = "sqlite:///info-leak-monitor.sqlite?charset=utf8mb4&check_same_thread=false"
+    database_url: str = "sqlite:///{{cookiecutter.project_name}}.sqlite?charset=utf8mb4&check_same_thread=false"
 
     database_echo: bool = False
 
@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = 'utf-8'
-        case_sensitive = True
+        # case_sensitive = True
 
 
 settings = Settings()
