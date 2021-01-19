@@ -31,10 +31,9 @@ async def get_current_user(
         db: Session = Depends(get_db),
 ) -> UserInfo:
     if security_scopes.scopes:
-        authenticate_value = (
-            f'{settings.jwt_token_prefix} scope="{security_scopes.scope_str}"')
+        authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
-        authenticate_value = f"{settings.jwt_token_prefix}"
+        authenticate_value = "Bearer"
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

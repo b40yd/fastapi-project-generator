@@ -4,7 +4,6 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
-from app.core.config import settings
 from app.core.deps import get_db
 from app.core.security import create_access_token
 from app.repositories.user import UserRepository, get_current_active_user
@@ -69,7 +68,4 @@ async def login_for_access_token(
         "sub": user.username,
         "scopes": form_data.scopes
     })
-    return {
-        "access_token": access_token,
-        "token_type": settings.jwt_token_prefix
-    }
+    return {"access_token": access_token, "token_type": "Bearer"}

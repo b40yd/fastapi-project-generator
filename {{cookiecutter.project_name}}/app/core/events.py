@@ -4,44 +4,40 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
-from typing import Callable
+# from typing import Callable
 
-from app.core.config import settings
-from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from fastapi import FastAPI
-from loguru import logger
+# from app.core.config import settings
+# from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+# from apscheduler.schedulers.asyncio import AsyncIOScheduler
+# from fastapi import FastAPI
+# from loguru import logger
 
+# async def start_scheduler(app: FastAPI) -> None:
+#     logger.info("APScheduler Starting", repr(settings.database_url))
+#     jobstores = {
+#         'default': SQLAlchemyJobStore(url=settings.database_url)
+#     }
+#     app.scheduler = AsyncIOScheduler()
+#     app.scheduler.configure(jobstores=jobstores)
 
-async def start_scheduler(app: FastAPI) -> None:
-    logger.info("APScheduler Starting", repr(settings.database_url))
-    jobstores = {
-        'default': SQLAlchemyJobStore(url=settings.database_url)
-    }
-    app.scheduler = AsyncIOScheduler()
-    app.scheduler.configure(jobstores=jobstores)
+#     app.scheduler.start()
+#     logger.info("APScheduler established")
 
-    app.scheduler.start()
-    logger.info("APScheduler established")
+# async def stop_scheduler(app: FastAPI) -> None:
+#     logger.info("APScheduler Closing")
 
+#     await app.scheduler.close()
 
-async def stop_scheduler(app: FastAPI) -> None:
-    logger.info("APScheduler Closing")
+#     logger.info("APScheduler closed")
 
-    await app.scheduler.close()
+# def create_start_app_handler(app: FastAPI) -> Callable:
+#     async def start_app() -> None:
+#         await start_scheduler(app)
 
-    logger.info("APScheduler closed")
+#     return start_app
 
+# def create_stop_app_handler(app: FastAPI) -> Callable:
+#     async def stop_app() -> None:
+#         await stop_scheduler(app)
 
-def create_start_app_handler(app: FastAPI) -> Callable:
-    async def start_app() -> None:
-        await start_scheduler(app)
-
-    return start_app
-
-
-def create_stop_app_handler(app: FastAPI) -> Callable:
-    async def stop_app() -> None:
-        await stop_scheduler(app)
-
-    return stop_app
+#     return stop_app
