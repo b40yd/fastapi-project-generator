@@ -13,7 +13,7 @@ from pydantic import AnyHttpUrl, BaseSettings, IPvAnyAddress
 
 
 class Settings(BaseSettings):
-    project_name: str = "{{cookiecutter.fastapi_project}}"
+    project_name: str = "{{cookiecutter.project_name}}"
     allowed_hosts: List[str] = ["*"]
     api_prefix: str = "/api"
 
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     jwt_token_prefix: str = "Token"
     algorithm: str = "HS256"
-    secret_key: str = "{{cookiecutter.fastapi_project}}_{{cookiecutter.author}}"
+    secret_key: str = "{{cookiecutter.project_name}}_{{cookiecutter.author}}"
     access_token_expire: int = 60 * 60 * 24 * 7
 
     log_file: str = "info.log"
