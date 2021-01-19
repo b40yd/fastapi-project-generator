@@ -34,11 +34,12 @@ class Settings(BaseSettings):
     mysql_username: str = "root"
     mysql_password: str = ""
     mysql_host: Union[AnyHttpUrl, IPvAnyAddress] = "127.0.0.1"
-    mysql_poet: int = 3306
+    mysql_port: int = 3306
     mysql_database: str = ""
 
-    database_url: str = (f"mysql+pymysql://{mysql_username}:{mysql_password}@"
-                         f"{mysql_host}/{mysql_database}?charset=utf8mb4")
+    database_url: str = (
+        f"mysql+pymysql://{mysql_username}:{mysql_password}@"
+        f"{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4")
     database_echo: bool = False
 
     redis_host: str = "127.0.0.1"
