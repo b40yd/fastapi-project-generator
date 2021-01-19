@@ -17,7 +17,7 @@ from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=settings.jwt_token_prefix,
+    tokenUrl=settings.jwt_token_prefix.lower(),
     scopes={
         "me": "Read information about the current user.",
         # "items": "Read items."
@@ -66,7 +66,7 @@ async def get_current_user(
     return user
 
 
-async def get_current_active_user(current_user: User = Security(
+async def get_current_active_user(current_user: UserInfo = Security(
     get_current_user, scopes=["me"])):
 
     return current_user

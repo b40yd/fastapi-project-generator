@@ -3,6 +3,7 @@
 #
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
+from typing import Any, List, Union
 
 from pydantic import BaseModel
 
