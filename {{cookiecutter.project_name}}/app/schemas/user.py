@@ -13,10 +13,6 @@ from pydantic import BaseModel
 class UserAuth(BaseModel):
     username: str
     password: str
-    grant_type: Optional[str]
-    scopes: Optional[str]
-    client_id: Optional[str]
-    client_secret: Optional[str]
 
 
 class UserInfo(BaseModel):
