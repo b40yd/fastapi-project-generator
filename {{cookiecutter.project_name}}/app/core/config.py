@@ -4,18 +4,17 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
-from typing import Union, Optional
 import logging
-from typing import List
+from typing import List, Optional, Union
 
 from app.core.logging import InterceptHandler
 from loguru import logger
-from pydantic import BaseSettings, AnyHttpUrl, IPvAnyAddress
+from pydantic import AnyHttpUrl, BaseSettings, IPvAnyAddress
 
 
 class Settings(BaseSettings):
-    project_name: str = "{{cookiecutter.project}}"
-    allowed_hosts: List[str] = ['*']
+    project_name: str = "{{cookiecutter.fastapi_project}}"
+    allowed_hosts: List[str] = ["*"]
     api_prefix: str = "/api"
 
     version: str = "0.0.0"
@@ -27,28 +26,28 @@ class Settings(BaseSettings):
 
     jwt_token_prefix: str = "Token"
     algorithm: str = "HS256"
-    secret_key: str = '{{cookiecutter.project}}_{{cookiecutter.author}}'
+    secret_key: str = "{{cookiecutter.fastapi_project}}_{{cookiecutter.author}}"
     access_token_expire: int = 60 * 60 * 24 * 7
 
     log_file: str = "info.log"
 
-    mysql_username: str = 'root'
-    mysql_password: str = ''
+    mysql_username: str = "root"
+    mysql_password: str = ""
     mysql_host: Union[AnyHttpUrl, IPvAnyAddress] = "127.0.0.1"
     mysql_poet: int = 3306
-    mysql_database: str = ''
+    mysql_database: str = ""
 
-    database_url: str = f"mysql+pymysql://{mysql_username}:{mysql_password}@" \
-        f"{mysql_host}/{mysql_database}?charset=utf8mb4"
+    database_url: str = (f"mysql+pymysql://{mysql_username}:{mysql_password}@"
+                         f"{mysql_host}/{mysql_database}?charset=utf8mb4")
     database_echo: bool = False
 
-    redis_host: str = '127.0.0.1'
+    redis_host: str = "127.0.0.1"
     redis_port: int = 6379
-    redis_password: str = ''
+    redis_password: str = ""
 
     class Config:
         env_file = ".env"
-        env_file_encoding = 'utf-8'
+        env_file_encoding = "utf-8"
 
 
 settings = Settings()
@@ -67,6 +66,6 @@ logger.configure(
         "sink": settings.log_file,
         "level": LOGGING_LEVEL,
         "rotation": "00:00",
-        "retention": '10 days',
-        "format": "{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}"
+        "retention": "10 days",
+        "format": "{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}",
     }])
