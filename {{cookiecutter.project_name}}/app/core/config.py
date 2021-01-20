@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 
     database_username: str = "{{cookiecutter.database_username}}"
     database_password: str = "{{cookiecutter.database_password}}"
-    database_host: Union[AnyHttpUrl,
+    database_host: Union[str, AnyHttpUrl,
                          IPvAnyAddress] = "{{cookiecutter.database_host}}"
     database_port: int = 3306
     database_name: str = "{{cookiecutter.database_name}}"
