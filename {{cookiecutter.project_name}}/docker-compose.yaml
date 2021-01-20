@@ -30,4 +30,4 @@ services:
       - ./data/mysql/:/var/lib/mysql/
     environment:
       MYSQL_ROOT_PASSWORD: {{cookiecutter.database_password}}
-      MYSQL_DATABASE: {{cookiecutter.project_name}}
+      MYSQL_DATABASE: {{cookiecutter.database_name}}

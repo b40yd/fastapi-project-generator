@@ -36,11 +36,11 @@ class Settings(BaseSettings):
     database_host: Union[AnyHttpUrl,
                          IPvAnyAddress] = "{{cookiecutter.database_host}}"
     database_port: int = 3306
-    database_database: str = ""
+    database_name: str = "{{cookiecutter.database_name}}"
 
     database_url: str = (
         f"{{cookiecutter.database_driver}}://{database_username}:{database_password}@"
-        f"{database_host}:{database_port}/{database_database}?charset=utf8mb4")
+        f"{database_host}:{database_port}/{database_name}?charset=utf8mb4")
     database_echo: bool = False
 
     redis_host: str = "redis"
