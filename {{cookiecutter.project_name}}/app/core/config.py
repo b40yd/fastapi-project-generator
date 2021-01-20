@@ -5,7 +5,7 @@
 #
 
 import logging
-from typing import List, Optional, Union
+from typing import List, Union
 
 from app.core.logging import InterceptHandler
 from loguru import logger
@@ -19,6 +19,8 @@ class Settings(BaseSettings):
 
     version: str = "0.0.0"
     debug: bool = False
+
+    twepoch: int = 0  # id worker start time
 
     docs_url: str = f"{api_prefix}/docs"
     openapi_url: str = f"{api_prefix}/openapi.json"
