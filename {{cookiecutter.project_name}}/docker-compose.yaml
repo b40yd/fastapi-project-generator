@@ -11,7 +11,7 @@ services:
     links:
       - "database:local_database_server"
     depends_on:
-      - mysql
+      - database
   database:
     image: mariadb:latest
     restart: always
