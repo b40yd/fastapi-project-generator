@@ -19,7 +19,7 @@ from sqlalchemy.orm import Session
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=settings.jwt_token_prefix.lower(),
     scopes={
-        "me": "Read information about the current user.",
+        "api": "Read information about the current API.",
         # "items": "Read items."
     },
 )
@@ -66,7 +66,7 @@ async def get_current_user(
 
 
 async def get_current_active_user(current_user: UserInfo = Security(
-    get_current_user, scopes=["me"])):
+    get_current_user, scopes=["api"])):
 
     return current_user
 
