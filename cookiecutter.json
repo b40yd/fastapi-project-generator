@@ -3,5 +3,9 @@
     "copyright": "copyright",
     "author": "author",
     "email": "email",
+    "database_driver": "mysql+pymysql",
+    "database_host": "database",
+    "database_username": "root",
+    "database_name": "my_database",
     "database_password": "database_password"
 }

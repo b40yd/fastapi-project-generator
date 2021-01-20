@@ -2,20 +2,28 @@ version: "3.5"
 services:
   web:
     build: .
-    ports:
-      - "8000:80"
+    expose:
+      - 80
     volumes:
       - ./:/app/
     environment:
       TZ: Asia/Shanghai
     links:
-      - "database:local_database_server"
+      - database
+      - redis
     depends_on:
       - database
+      - redis
+    command: ["bash", "scripts/start.sh"]
+  redis:
+    image: redis:latest
+    restart: always
+    expose:
+      - 6379
   database:
     image: mariadb:latest
     restart: always
-    command: --max_allowed_packet=1073741824 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;'
+    command: --max_allowed_packet=1073741824 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     expose:
       - 3306
     volumes:

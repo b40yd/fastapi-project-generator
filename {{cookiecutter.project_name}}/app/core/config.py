@@ -31,18 +31,19 @@ class Settings(BaseSettings):
 
     log_file: str = "info.log"
 
-    mysql_username: str = "root"
-    mysql_password: str = ""
-    mysql_host: Union[AnyHttpUrl, IPvAnyAddress] = "127.0.0.1"
-    mysql_port: int = 3306
-    mysql_database: str = ""
+    database_username: str = "{{cookiecutter.database_username}}"
+    database_password: str = "{{cookiecutter.database_password}}"
+    database_host: Union[AnyHttpUrl,
+                         IPvAnyAddress] = "{{cookiecutter.database_host}}"
+    database_port: int = 3306
+    database_database: str = ""
 
     database_url: str = (
-        f"mysql+pymysql://{mysql_username}:{mysql_password}@"
-        f"{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4")
+        f"{{cookiecutter.database_driver}}://{database_username}:{database_password}@"
+        f"{database_host}:{database_port}/{database_database}?charset=utf8mb4")
     database_echo: bool = False
 
-    redis_host: str = "127.0.0.1"
+    redis_host: str = "redis"
     redis_port: int = 6379
     redis_password: str = ""
 

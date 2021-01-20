@@ -4,25 +4,25 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
+from app.core.config import settings
+from app.core.http_error import http_error_handler
+from app.core.routers import router as api_router
+from app.core.validation_error import http422_error_handler
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
 
-from app.core.config import settings
-from app.core.events import create_start_app_handler, create_stop_app_handler
-from app.core.http_error import http_error_handler
-from app.core.routers import router as api_router
-from app.core.validation_error import http422_error_handler
-
 
 def get_application() -> FastAPI:
-    application = FastAPI(title=settings.project_name,
-                          debug=settings.debug,
-                          docs_url=settings.docs_url,
-                          openapi_url=settings.openapi_url,
-                          redoc_url=settings.redoc_url,
-                          version=settings.version)
+    application = FastAPI(
+        title=settings.project_name,
+        debug=settings.debug,
+        docs_url=settings.docs_url,
+        openapi_url=settings.openapi_url,
+        redoc_url=settings.redoc_url,
+        version=settings.version,
+    )
 
     application.add_middleware(
         CORSMiddleware,
