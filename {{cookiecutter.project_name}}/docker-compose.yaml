@@ -1,0 +1,25 @@
+version: "3.5"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/app/
+    environment:
+      TZ: Asia/Shanghai
+    links:
+      - "database:local_database_server"
+    depends_on:
+      - mysql
+  database:
+    image: mariadb:latest
+    restart: always
+    command: --max_allowed_packet=1073741824 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;'
+    expose:
+      - 3306
+    volumes:
+      - ./data/mysql/:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: {{cookiecutter.database_password}}
+      MYSQL_DATABASE: {{cookiecutter.project_name}}

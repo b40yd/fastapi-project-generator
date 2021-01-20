@@ -2,5 +2,6 @@
     "project_name": "fastapi_project",
     "copyright": "copyright",
     "author": "author",
-    "email": "email"
+    "email": "email",
+    "database_password": "database_password"
 }
