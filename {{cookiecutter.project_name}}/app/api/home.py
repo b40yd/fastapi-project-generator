@@ -4,7 +4,7 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
-from app.core.deps import get_db
+from app.core.deps import get_db, verify_token
 from app.core.security import create_access_token
 from app.repositories.user import UserRepository, get_current_active_user
 from app.schemas.token import Token
@@ -69,3 +69,8 @@ async def login_for_access_token(
         "scopes": form_data.scopes
     })
     return {"access_token": access_token, "token_type": "Bearer"}
+
+
+@router.post("/status", dependencies=[Depends(verify_token)])
+async def get_status():
+    return {"status": "ok"}

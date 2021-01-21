@@ -55,13 +55,19 @@ async def get_current_user(
     except (JWTError, ValidationError):
         raise credentials_exception
 
+    flag = False
     for scope in security_scopes.scopes:
-        if scope not in token_data.scopes:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissions",
-                headers={"WWW-Authenticate": authenticate_value},
-            )
+        if scope in token_data.scopes:
+            flag = True
+            break
+
+    if not flag:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not enough permissions",
+            headers={"WWW-Authenticate": authenticate_value},
+        )
+
     return user
 
 
