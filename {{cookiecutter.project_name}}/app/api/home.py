@@ -9,7 +9,7 @@ from app.core.security import create_access_token
 from app.repositories.user import UserRepository, get_current_active_user
 from app.schemas.token import Token
 from app.schemas.user import UserInfo, UserRegister
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordRequestForm
 from loguru import logger
 from sqlalchemy.orm import Session
@@ -71,6 +71,6 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "Bearer"}
 
 
-@router.post("/status", dependencies=[Depends(verify_token)])
+@router.post("/status", dependencies=[Security(verify_token, scopes=["api"])])
 async def get_status():
     return {"status": "ok"}
