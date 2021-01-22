@@ -112,8 +112,9 @@ if [ ! -d $BASEPATH/$BACKUPS ]; then
 fi
 
 if [[ "$USER" != "" && "$PASSWD" != "" ]]; then
+    filename=$(echo $DATABASES-${TABLES:-"all"}| sed s/[[:space:]]/_/g)
     # echo "mysqldump -h $HOST -P$PORT  -u root -p $DATABASES $TABLES > $BACKUPS/$(date +'%Y-%m-%d_%H_%M_%S').sql"
-    mysqldump -h $HOST -P $PORT -u $USER -p${PASSWD} $DATABASES $TABLES > $BASEPATH/$BACKUPS/$(date +'%Y-%m-%d_%H_%M_%S').sql
+    mysqldump -h $HOST -P $PORT -u $USER -p${PASSWD} $DATABASES $TABLES > $BASEPATH/$BACKUPS/$(date +'%Y-%m-%d_%H_%M_%S')-$filename.sql
     if [ $? -ne 0 ];then
         echoerr "Error: $HOST:$PORT $DATABASES $TABLES backup failed."
         exit 1
