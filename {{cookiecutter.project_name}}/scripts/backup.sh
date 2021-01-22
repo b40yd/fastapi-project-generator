@@ -76,7 +76,7 @@ do
             DATABASES="${1#*=}"
             shift 1
             ;;
-        -d)
+        -t)
             TABLES="$2"
             if [[ $TABLES == "" ]]; then break; fi
             shift 2
@@ -115,7 +115,7 @@ if [[ "$USER" != "" && "$PASSWD" != "" ]]; then
     # echo "mysqldump -h $HOST -P$PORT  -u root -p $DATABASES $TABLES > $BACKUPS/$(date +'%Y-%m-%d_%H_%M_%S').sql"
     mysqldump -h $HOST -P $PORT -u $USER -p${PASSWD} $DATABASES $TABLES > $BASEPATH/$BACKUPS/$(date +'%Y-%m-%d_%H_%M_%S').sql
     if [ $? -ne 0 ];then
-        echoerr "Error: $HOST:$PORT $DATABASES backup failed."
+        echoerr "Error: $HOST:$PORT $DATABASES $TABLES backup failed."
         exit 1
     fi
 else
