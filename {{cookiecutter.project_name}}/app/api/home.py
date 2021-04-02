@@ -13,8 +13,11 @@ from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordRequestForm
 from loguru import logger
 from sqlalchemy.orm import Session
-from starlette.status import (HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN,
-                              HTTP_500_INTERNAL_SERVER_ERROR)
+from starlette.status import (
+    HTTP_401_UNAUTHORIZED,
+    HTTP_403_FORBIDDEN,
+    HTTP_500_INTERNAL_SERVER_ERROR,
+)
 
 router = APIRouter()
 
@@ -22,7 +25,7 @@ router = APIRouter()
 @router.post("/register", response_model=UserInfo)
 async def register(userinfo: UserRegister, db: Session = Depends(get_db)):
     try:
-        user = UserRepository.get_by_username(db, userinfo.username)
+        user = UserRepository(db).get_by_username(userinfo.username)
         if user:
             raise HTTPException(
                 status_code=HTTP_403_FORBIDDEN,
@@ -30,7 +33,7 @@ async def register(userinfo: UserRegister, db: Session = Depends(get_db)):
                     userinfo.username),
             )
         else:
-            user = UserRepository.create(db, userinfo)
+            user = UserRepository(db).create(userinfo)
 
         return {
             "username": user.username,
@@ -53,8 +56,8 @@ async def login_for_access_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
         db: Session = Depends(get_db)):
     try:
-        user = UserRepository.authenticate(db, form_data.username,
-                                           form_data.password)
+        user = UserRepository(db).authenticate(form_data.username,
+                                               form_data.password)
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR,
