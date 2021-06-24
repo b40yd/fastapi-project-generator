@@ -4,8 +4,8 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
-from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Union
+import time
+from typing import Dict
 
 from app.core.config import settings
 from jose import jwt
@@ -25,10 +25,10 @@ def get_password_hash(password):
 def create_jwt_token(
     jwt_content: Dict,
     secret_key: str,
-    expires_delta: Optional[timedelta] = None,
+    expires_delta: int = 3600 * 24,
 ):
     to_encode = jwt_content.copy()
-    expire = datetime.utcnow() + expires_delta
+    expire = int(time.time()) + expires_delta
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, secret_key, algorithm=settings.algorithm)
 
@@ -37,5 +37,5 @@ def create_access_token(data: Dict):
     return create_jwt_token(
         jwt_content=data,
         secret_key=settings.secret_key,
-        expires_delta=timedelta(seconds=settings.access_token_expire),
+        expires_delta=settings.access_token_expire,
     )

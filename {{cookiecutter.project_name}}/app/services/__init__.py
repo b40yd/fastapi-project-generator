@@ -15,3 +15,6 @@ class Service:
     def __init__(self, db: Session, config: Settings):
         self.db = db
         self.config = config
+
+    def get_config(self) -> Settings:
+        return self.config
