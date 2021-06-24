@@ -4,60 +4,58 @@
 # Author: {{cookiecutter.author}} <{{cookiecutter.email}}>
 #
 
-from app.core.deps import get_db, verify_token
-from app.core.security import create_access_token
-from app.repositories.user import UserRepository, get_current_active_user
+from app.core.deps import get_db
+from app.core.security import create_access_token, verify_access_token
+from app.services.user import UserService
 from app.schemas.token import Token
 from app.schemas.user import UserInfo, UserRegister
 from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordRequestForm
 from loguru import logger
-from sqlalchemy.orm import Session
 from starlette.status import (
     HTTP_401_UNAUTHORIZED,
-    HTTP_403_FORBIDDEN,
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
 
 router = APIRouter()
+user = APIRouter(prefix="/user",
+                 dependencies=[Security(verify_access_token, scopes=["api"])])
 
 
 @router.post("/register", response_model=UserInfo)
-async def register(userinfo: UserRegister, db: Session = Depends(get_db)):
+async def register(userinfo: UserRegister,
+                   user_service: UserService = Depends(UserService)):
     try:
-        user = UserRepository(db).get_by_username(userinfo.username)
-        if user:
-            raise HTTPException(
-                status_code=HTTP_403_FORBIDDEN,
-                detail="'{0}' existed, register failed. ".format(
-                    userinfo.username),
-            )
-        else:
-            user = UserRepository(db).create(userinfo)
+
+        user = user_service.create(userinfo)
 
         return {
             "username": user.username,
             "email": user.email,
         }
 
-    except Exception as e:
+    except HTTPException as e:
         logger.error(e)
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="Internal Server Error")
 
 
-@router.get("/me", response_model=UserInfo)
-async def info(current_user: UserInfo = Depends(get_current_active_user)):
-    return current_user
+@user.get("/me", response_model=UserInfo)
+async def info(
+        current_user: UserInfo = Depends(verify_access_token),
+        user_service: UserService = Depends(UserService),
+):
+    return user_service.get_current_user(current_user)
 
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
         form_data: OAuth2PasswordRequestForm = Depends(),
-        db: Session = Depends(get_db)):
+        user_service: UserService = Depends(UserService),
+):
     try:
-        user = UserRepository(db).authenticate(form_data.username,
-                                               form_data.password)
+        user = user_service.authenticate(form_data.username,
+                                         form_data.password)
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR,
@@ -74,6 +72,6 @@ async def login_for_access_token(
     return {"access_token": access_token, "token_type": "Bearer"}
 
 
-@router.post("/status", dependencies=[Security(verify_token, scopes=["api"])])
+@router.post("/status")
 async def get_status():
     return {"status": "ok"}

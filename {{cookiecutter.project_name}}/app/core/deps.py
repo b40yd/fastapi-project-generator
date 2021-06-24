@@ -16,38 +16,10 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 
 
 def get_db() -> Generator:
+    db = None
     try:
         db = SessionLocal()
         yield db
     finally:
-        db.close()
-
-
-async def verify_token(security_scopes: SecurityScopes,
-                       x_token: str = Header(...)):
-    credentials_exception = HTTPException(
-        status_code=HTTP_401_UNAUTHORIZED,
-        detail="401 unauthorized",
-    )
-
-    try:
-        payload = jwt.decode(x_token, settings.secret_key)
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        token_scopes = payload.get("scopes", [])
-        token_data = TokenData(scopes=token_scopes, subject=username)
-    except (JWTError, AttributeError):
-        raise credentials_exception
-
-    flag = False
-    for scope in security_scopes.scopes:
-        if scope in token_data.scopes:
-            flag = True
-            break
-
-    if not flag:
-        raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
-            detail="Not enough permissions",
-        )
+        if not db is None:
+            db.close()
