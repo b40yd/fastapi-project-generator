@@ -9,4 +9,4 @@ fi
 $BASEPATH/wait-for-it.sh database:3306 -- echo "database started"
 $BASEPATH/wait-for-it.sh redis:3306 -- echo "redis started"
 
-uvicorn app.main:app --host 0.0.0.0 --port 80
+uvicorn main:app --host 0.0.0.0 --port 80

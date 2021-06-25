@@ -6,7 +6,7 @@
 
 from app.core.config import settings
 from app.core.http_error import http_error_handler
-from app.core.routers import router as api_router
+from app.routers import router as api_router
 from app.core.validation_error import http422_error_handler
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError

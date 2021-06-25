@@ -10,16 +10,9 @@ services:
       TZ: Asia/Shanghai
     links:
       - database
-      - redis
     depends_on:
       - database
-      - redis
     command: ["bash", "scripts/start.sh"]
-  redis:
-    image: redis:latest
-    restart: always
-    expose:
-      - 6379
   database:
     image: mariadb:latest
     restart: always
